@@ -1,12 +1,21 @@
-/* =========================
-FIREBASE
-========================= */
+import {
+
+db,
+collection,
+addDoc,
+getDocs,
+doc,
+deleteDoc
+
+}
+
+from "./firebase.js";
+
 /* =========================
 ADMIN
 ========================= */
 
 const ADMIN_EMAIL =
-
 "matheuscoutinhoirespereira8@gmail.com";
 
 /* USER */
@@ -34,17 +43,6 @@ window.location.href =
 "/index.html";
 
 }
-const db = window.db;
-
-const collection = window.collection;
-
-const addDoc = window.addDoc;
-
-const getDocs = window.getDocs;
-
-const docFirebase = window.doc;
-
-const deleteDocFirebase = window.deleteDoc;
 
 /* =========================
 CATEGORIAS
@@ -82,7 +80,7 @@ const categorias = {
 };
 
 /* =========================
-SELECTS
+ELEMENTOS
 ========================= */
 
 const categoriaSelect =
@@ -95,7 +93,21 @@ document.getElementById(
 "subcategoria"
 );
 
-/* LOOP */
+const imagemInput =
+document.getElementById(
+"imagemFile"
+);
+
+const previewImagem =
+document.getElementById(
+"previewImagem"
+);
+
+/* =========================
+CATEGORIAS
+========================= */
+
+if(categoriaSelect) {
 
 Object.keys(categorias).forEach(cat => {
 
@@ -112,8 +124,6 @@ categoriaSelect.appendChild(
 option);
 
 });
-
-/* CHANGE */
 
 categoriaSelect.addEventListener(
 
@@ -150,19 +160,13 @@ option);
 
 );
 
+}
+
 /* =========================
 PREVIEW
 ========================= */
 
-const imagemInput =
-document.getElementById(
-"imagemFile"
-);
-
-const previewImagem =
-document.getElementById(
-"previewImagem"
-);
+if(imagemInput) {
 
 imagemInput.addEventListener(
 
@@ -186,11 +190,96 @@ previewImagem.style.display =
 
 );
 
+}
+
+/* =========================
+BASE64
+========================= */
+
+function converterBase64(file) {
+
+return new Promise((resolve, reject) => {
+
+const reader =
+new FileReader();
+
+reader.readAsDataURL(file);
+
+reader.onload = () => {
+
+resolve(reader.result);
+
+};
+
+reader.onerror = error => {
+
+reject(error);
+
+};
+
+});
+
+}
+
+/* =========================
+RESET FORM
+========================= */
+
+function resetarFormulario() {
+
+document.getElementById(
+"nome"
+).value = "";
+
+document.getElementById(
+"preco"
+).value = "";
+
+document.getElementById(
+"categoria"
+).value = "";
+
+document.getElementById(
+"subcategoria"
+).innerHTML =
+
+`<option value="">
+Selecione a subcategoria
+</option>`;
+
+document.getElementById(
+"unidade"
+).value = "";
+
+document.getElementById(
+"tipoCotacao"
+).value = "";
+
+document.getElementById(
+"estoque"
+).value = "";
+
+if(imagemInput) {
+
+imagemInput.value = "";
+
+}
+
+if(previewImagem) {
+
+previewImagem.style.display =
+"none";
+
+}
+
+}
+
 /* =========================
 CADASTRAR PRODUTO
 ========================= */
 
-async function cadastrarProduto() {
+window.cadastrarProduto =
+async function() {
 
 try {
 
@@ -252,13 +341,18 @@ let imagem =
 
 /* BASE64 */
 
-if(imagemInput.files[0]) {
-
-const file =
-imagemInput.files[0];
+if(
+imagemInput &&
+imagemInput.files[0]
+) {
 
 imagem =
-await converterBase64(file);
+
+await converterBase64(
+
+imagemInput.files[0]
+
+);
 
 }
 
@@ -266,7 +360,10 @@ await converterBase64(file);
 
 await addDoc(
 
-collection(db, "produtos"),
+collection(
+db,
+"produtos"
+),
 
 {
 
@@ -277,7 +374,9 @@ subcategoria,
 unidade,
 tipoCotacao,
 estoque,
-imagem
+imagem,
+criadoEm:
+Date.now()
 
 }
 
@@ -291,42 +390,7 @@ alert(
 
 /* RESET */
 
-document.getElementById(
-"nome"
-).value = "";
-
-document.getElementById(
-"preco"
-).value = "";
-
-document.getElementById(
-"categoria"
-).value = "";
-
-document.getElementById(
-"subcategoria"
-).innerHTML =
-
-`<option value="">
-Selecione a subcategoria
-</option>`;
-
-document.getElementById(
-"unidade"
-).value = "";
-
-document.getElementById(
-"tipoCotacao"
-).value = "";
-
-document.getElementById(
-"estoque"
-).value = "";
-
-imagemInput.value = "";
-
-previewImagem.style.display =
-"none";
+resetarFormulario();
 
 /* RELOAD */
 
@@ -341,41 +405,12 @@ catch(err) {
 console.log(err);
 
 alert(
-"Erro ao cadastrar"
+"Erro ao cadastrar produto"
 );
 
 }
 
-}
-
-/* =========================
-BASE64
-========================= */
-
-function converterBase64(file) {
-
-return new Promise((resolve, reject) => {
-
-const reader =
-new FileReader();
-
-reader.readAsDataURL(file);
-
-reader.onload = () => {
-
-resolve(reader.result);
-
 };
-
-reader.onerror = error => {
-
-reject(error);
-
-};
-
-});
-
-}
 
 /* =========================
 LISTAR PRODUTOS
@@ -383,20 +418,27 @@ LISTAR PRODUTOS
 
 async function carregarProdutos() {
 
-const snapshot =
-
-await getDocs(
-
-collection(db, "produtos")
-
-);
-
 const lista =
 document.getElementById(
 "listaProdutos"
 );
 
+if(!lista) return;
+
 lista.innerHTML = "";
+
+/* FIREBASE */
+
+const snapshot =
+
+await getDocs(
+
+collection(
+db,
+"produtos"
+)
+
+);
 
 /* LOOP */
 
@@ -433,7 +475,6 @@ ${produto.nome}
 </h3>
 
 <p>
-Categoria:
 ${produto.categoria}
 </p>
 
@@ -462,11 +503,14 @@ lista.appendChild(div);
 DELETE
 ========================= */
 
-async function deletarProduto(id) {
+window.deletarProduto =
+async function(id) {
 
-await deleteDocFirebase(
+try {
 
-docFirebase(
+await deleteDoc(
+
+doc(
 db,
 "produtos",
 id
@@ -479,6 +523,14 @@ carregarProdutos();
 carregarDashboard();
 
 }
+
+catch(err) {
+
+console.log(err);
+
+}
+
+};
 
 /* =========================
 TICKETS
@@ -504,9 +556,7 @@ Sistema Firebase
 </h3>
 
 <p>
-Tickets foram desativados
-temporariamente.
-
+Tickets temporariamente desativados.
 </p>
 
 </div>
@@ -525,7 +575,10 @@ const snapshot =
 
 await getDocs(
 
-collection(db, "produtos")
+collection(
+db,
+"produtos"
+)
 
 );
 
@@ -537,29 +590,67 @@ produtos.push(doc.data());
 
 });
 
+/* TOTAL */
+
+const totalProdutos =
 document.getElementById(
 "totalProdutos"
-).innerText =
+);
+
+if(totalProdutos) {
+
+totalProdutos.innerText =
 produtos.length;
 
+}
+
+/* PEDIDOS */
+
+const totalPedidos =
 document.getElementById(
 "totalPedidos"
-).innerText =
+);
+
+if(totalPedidos) {
+
+totalPedidos.innerText =
 0;
 
+}
+
+/* TICKETS */
+
+const totalTickets =
 document.getElementById(
 "totalTickets"
-).innerText =
+);
+
+if(totalTickets) {
+
+totalTickets.innerText =
 0;
 
+}
+
+/* VENDAS */
+
+const totalVendas =
 document.getElementById(
 "totalVendas"
-).innerText =
+);
+
+if(totalVendas) {
+
+totalVendas.innerText =
 "R$ 0,00";
 
 }
 
-/* INIT */
+}
+
+/* =========================
+INIT
+========================= */
 
 carregarProdutos();
 
