@@ -168,14 +168,10 @@ PREVIEW
 
 if(imagemInput) {
 
-imagemInput.addEventListener(
-
-"change",
-
-function() {
+imagemInput.onchange = e => {
 
 const file =
-this.files[0];
+e.target.files[0];
 
 if(!file) return;
 
@@ -186,9 +182,7 @@ URL.createObjectURL(file);
 previewImagem.style.display =
 "block";
 
-}
-
-);
+};
 
 }
 
@@ -244,8 +238,6 @@ canvas.height
 
 );
 
-/* COMPRESS */
-
 const compressedBase64 =
 
 canvas.toDataURL(
@@ -270,29 +262,6 @@ reject(error);
 });
 
 }
-
-return new Promise((resolve, reject) => {
-
-const reader =
-new FileReader();
-
-reader.readAsDataURL(file);
-
-reader.onload = () => {
-
-resolve(reader.result);
-
-};
-
-reader.onerror = error => {
-
-reject(error);
-
-};
-
-});
-
-
 
 /* =========================
 RESET FORM
@@ -455,17 +424,11 @@ Date.now()
 
 );
 
-/* ALERT */
-
 alert(
 "Produto cadastrado!"
 );
 
-/* RESET */
-
 resetarFormulario();
-
-/* RELOAD */
 
 carregarProdutos();
 
@@ -500,8 +463,6 @@ if(!lista) return;
 
 lista.innerHTML = "";
 
-/* FIREBASE */
-
 const snapshot =
 
 await getDocs(
@@ -512,8 +473,6 @@ db,
 )
 
 );
-
-/* LOOP */
 
 snapshot.forEach(docItem => {
 
@@ -663,8 +622,6 @@ produtos.push(doc.data());
 
 });
 
-/* TOTAL */
-
 const totalProdutos =
 document.getElementById(
 "totalProdutos"
@@ -676,8 +633,6 @@ totalProdutos.innerText =
 produtos.length;
 
 }
-
-/* PEDIDOS */
 
 const totalPedidos =
 document.getElementById(
@@ -691,8 +646,6 @@ totalPedidos.innerText =
 
 }
 
-/* TICKETS */
-
 const totalTickets =
 document.getElementById(
 "totalTickets"
@@ -704,8 +657,6 @@ totalTickets.innerText =
 0;
 
 }
-
-/* VENDAS */
 
 const totalVendas =
 document.getElementById(
