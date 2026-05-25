@@ -5,10 +5,10 @@ FIREBASE
 const auth = window.auth;
 
 const createUserWithEmailAndPassword =
-window.createUserWithEmailAndPassword;
+window.firebaseCreateUser;
 
 const signInWithEmailAndPassword =
-window.signInWithEmailAndPassword;
+window.firebaseLogin
 
 const signOutFirebase =
 window.signOut;
