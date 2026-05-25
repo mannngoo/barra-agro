@@ -341,11 +341,9 @@ tipoCotacao
 
 } = req.body;
 
-/* IMG */
 let imagem =
 "/uploads/default-product.jpg";
 
-/* FOTO */
 if(req.file) {
 
 imagem =
@@ -354,7 +352,6 @@ req.file.filename;
 
 }
 
-/* INSERT */
 db.prepare(`
 
 INSERT INTO produtos (
@@ -500,7 +497,6 @@ senha
 
 } = req.body;
 
-/* FOTO */
 let foto =
 "/uploads/default-user.png";
 
@@ -512,14 +508,12 @@ req.file.filename;
 
 }
 
-/* HASH */
 const senhaHash =
 await bcrypt.hash(
 senha,
 10
 );
 
-/* INSERT */
 db.prepare(`
 
 INSERT INTO usuarios (
@@ -671,7 +665,6 @@ frete
 
 } = req.body;
 
-/* INSERT */
 const pedido =
 db.prepare(`
 
@@ -700,7 +693,6 @@ new Date().toLocaleString()
 const pedidoId =
 pedido.lastInsertRowid;
 
-/* LOOP */
 produtos.forEach(produto => {
 
 db.prepare(`
@@ -962,4 +954,4 @@ console.log(
 
 );
 
-});sqlite3
+});

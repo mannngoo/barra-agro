@@ -1,7 +1,16 @@
 /* =========================
 FIREBASE
 ========================= */
+import {
 
+auth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut
+
+}
+
+from "./firebase.js";
 const auth = window.auth;
 
 const createUserWithEmailAndPassword =

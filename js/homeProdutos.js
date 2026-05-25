@@ -2,16 +2,16 @@
 FIREBASE HOME PRODUTOS
 COMPLETO
 ========================= */
+import {
 
-const db = window.db;
+db,
+collection,
+getDocs
 
-const collection = window.collection;
+}
 
-const getDocs = window.getDocs;
+from "./firebase.js";
 
-/* =========================
-CARREGAR PRODUTOS
-========================= */
 
 async function carregarHomeProdutos() {
 
@@ -174,7 +174,7 @@ ABRIR PRODUTO
 
 function abrirProduto(id) {
 
-window.location.href =
+
 
 `/pages/produto.html?id=${id}`;
 
@@ -189,11 +189,10 @@ function adicionarCarrinho(id) {
 /* PRODUTOS */
 
 const produtos =
-window.produtosFirebase || [];
 
-/* FIND */
 
-const produto =
+
+
 
 produtos.find(p => p.id === id);
 

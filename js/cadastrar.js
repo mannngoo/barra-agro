@@ -1,51 +1,70 @@
-function cadastro() {
+async function cadastro() {
 
-    const nome =
-        document.getElementById("nome").value;
+try {
 
-    const email =
-        document.getElementById("email").value;
+const nome =
+document.getElementById("nome").value;
 
-    const senha =
-        document.getElementById("senha").value;
+const email =
+document.getElementById("email").value;
 
-    fetch("http://localhost:3000/cadastro", {
+const senha =
+document.getElementById("senha").value;
 
-        method: "POST",
+/* FIREBASE */
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+const userCredential =
 
-        body: JSON.stringify({
+await createUserWithEmailAndPassword(
 
-            nome,
-            email,
-            senha
+auth,
+email,
+senha
 
-        })
+);
 
-    })
+/* USER */
 
-    .then(res => res.json())
+const usuario = {
 
-    .then(data => {
+uid:
+userCredential.user.uid,
 
-        if(data.sucesso) {
+nome,
+email,
 
-            alert("Conta criada!");
+foto:
+"/assets/images/default-user.png"
 
-            window.location.href =
-                "login.html";
+};
 
-        }
+/* SAVE */
 
-        else {
+localStorage.setItem(
 
-            alert(data.erro);
+"usuario",
 
-        }
+JSON.stringify(usuario)
 
-    });
+);
+
+/* ALERT */
+
+alert("Conta criada!");
+
+/* REDIRECT */
+
+window.location.href =
+"/pages/login.html";
+
+}
+
+catch(err) {
+
+console.log(err);
+
+alert(err.message);
+
+}
 
 }

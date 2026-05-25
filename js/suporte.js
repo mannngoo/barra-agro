@@ -12,7 +12,7 @@ async function carregarTickets() {
 const resposta =
 
 await fetch(
-"http://localhost:3000/tickets"
+
 );
 
 const tickets =
@@ -108,7 +108,6 @@ const resposta =
 
 await fetch(
 
-"http://localhost:3000/ticket",
 
 {
 

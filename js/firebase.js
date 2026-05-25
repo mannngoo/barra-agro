@@ -1,5 +1,3 @@
-// FIREBASE
-
 import { initializeApp }
 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -51,42 +49,23 @@ appId: "1:272668777172:web:5b140f852a520ff4de3941"
 const app =
 initializeApp(firebaseConfig);
 
-/* AUTH */
+/* EXPORTS */
 
-const auth =
+export const auth =
 getAuth(app);
 
-/* DB */
-
-const db =
+export const db =
 getFirestore(app);
 
-/* WINDOW */
+export {
 
-window.auth = auth;
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+collection,
+addDoc,
+getDocs,
+doc,
+deleteDoc
 
-window.db = db;
-
-window.createUserWithEmailAndPassword =
-createUserWithEmailAndPassword;
-
-window.signInWithEmailAndPassword =
-signInWithEmailAndPassword;
-
-window.signOut =
-signOut;
-
-window.collection =
-collection;
-
-window.addDoc =
-addDoc;
-
-window.getDocs =
-getDocs;
-
-window.doc =
-doc;
-
-window.deleteDoc =
-deleteDoc;
+};

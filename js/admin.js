@@ -1,4 +1,20 @@
 /* =========================
+FIREBASE
+========================= */
+
+const db = window.db;
+
+const collection = window.collection;
+
+const addDoc = window.addDoc;
+
+const getDocs = window.getDocs;
+
+const docFirebase = window.doc;
+
+const deleteDocFirebase = window.deleteDoc;
+
+/* =========================
 CATEGORIAS
 ========================= */
 
@@ -48,6 +64,7 @@ document.getElementById(
 );
 
 /* LOOP */
+
 Object.keys(categorias).forEach(cat => {
 
 const option =
@@ -60,12 +77,12 @@ option.value = cat;
 option.innerText = cat;
 
 categoriaSelect.appendChild(
-option
-);
+option);
 
 });
 
 /* CHANGE */
+
 categoriaSelect.addEventListener(
 
 "change",
@@ -93,8 +110,7 @@ option.value = sub;
 option.innerText = sub;
 
 subcategoriaSelect.appendChild(
-option
-);
+option);
 
 });
 
@@ -182,6 +198,7 @@ document.getElementById(
 ).value;
 
 /* VALIDAÇÃO */
+
 if(
 !nome ||
 !preco ||
@@ -196,92 +213,52 @@ return;
 
 }
 
-/* FORM DATA */
-const formData =
-new FormData();
+/* IMAGEM */
 
-formData.append(
-"nome",
-nome
-);
+let imagem =
+"/assets/images/default-product.jpg";
 
-formData.append(
-"preco",
-preco
-);
+/* BASE64 */
 
-formData.append(
-"categoria",
-categoria
-);
+if(imagemInput.files[0]) {
 
-formData.append(
-"subcategoria",
-subcategoria
-);
+const file =
+imagemInput.files[0];
 
-formData.append(
-"unidade",
-unidade
-);
-
-formData.append(
-"tipoCotacao",
-tipoCotacao
-);
-
-formData.append(
-"estoque",
-estoque
-);
-
-/* FOTO */
-if(
-imagemInput.files[0]
-) {
-
-formData.append(
-"imagem",
-imagemInput.files[0]
-);
+imagem =
+await converterBase64(file);
 
 }
 
-/* FETCH */
-const resposta =
+/* FIREBASE */
 
-await fetch(
+await addDoc(
 
-"http://localhost:3000/produto",
+collection(db, "produtos"),
 
 {
 
-method: "POST",
-
-body: formData
+nome,
+preco,
+categoria,
+subcategoria,
+unidade,
+tipoCotacao,
+estoque,
+imagem
 
 }
 
 );
 
-/* TEXTO */
-const texto =
-await resposta.text();
-
-console.log(texto);
-
-/* JSON */
-const dados =
-JSON.parse(texto);
-
-/* SUCESSO */
-if(dados.sucesso) {
+/* ALERT */
 
 alert(
 "Produto cadastrado!"
 );
 
 /* RESET */
+
 document.getElementById(
 "nome"
 ).value = "";
@@ -320,13 +297,16 @@ previewImagem.style.display =
 "none";
 
 /* RELOAD */
+
 carregarProdutos();
 
 carregarDashboard();
 
 }
 
-else {
+catch(err) {
+
+console.log(err);
 
 alert(
 "Erro ao cadastrar"
@@ -336,15 +316,32 @@ alert(
 
 }
 
-catch(err) {
+/* =========================
+BASE64
+========================= */
 
-console.log(err);
+function converterBase64(file) {
 
-alert(
-"Erro no servidor"
-);
+return new Promise((resolve, reject) => {
 
-}
+const reader =
+new FileReader();
+
+reader.readAsDataURL(file);
+
+reader.onload = () => {
+
+resolve(reader.result);
+
+};
+
+reader.onerror = error => {
+
+reject(error);
+
+};
+
+});
 
 }
 
@@ -354,14 +351,13 @@ LISTAR PRODUTOS
 
 async function carregarProdutos() {
 
-const resposta =
+const snapshot =
 
-await fetch(
-"http://localhost:3000/produtos"
+await getDocs(
+
+collection(db, "produtos")
+
 );
-
-const produtos =
-await resposta.json();
 
 const lista =
 document.getElementById(
@@ -371,7 +367,15 @@ document.getElementById(
 lista.innerHTML = "";
 
 /* LOOP */
-produtos.forEach(produto => {
+
+snapshot.forEach(docItem => {
+
+const produto = {
+
+id: docItem.id,
+...docItem.data()
+
+};
 
 const div =
 document.createElement(
@@ -385,7 +389,10 @@ div.classList.add(
 div.innerHTML = `
 
 <img
-src="http://localhost:3000${produto.imagem}">
+src="${
+produto.imagem ||
+'/assets/images/default-product.jpg'
+}">
 
 <div class="produto-admin-info">
 
@@ -405,7 +412,7 @@ R$ ${produto.preco}
 </div>
 
 <button
-onclick="deletarProduto(${produto.id})">
+onclick="deletarProduto('${produto.id}')">
 
 Excluir
 
@@ -425,15 +432,13 @@ DELETE
 
 async function deletarProduto(id) {
 
-await fetch(
+await deleteDocFirebase(
 
-`http://localhost:3000/produto/${id}`,
-
-{
-
-method: "DELETE"
-
-}
+docFirebase(
+db,
+"produtos",
+id
+)
 
 );
 
@@ -449,15 +454,6 @@ TICKETS
 
 async function carregarTickets() {
 
-const resposta =
-
-await fetch(
-"http://localhost:3000/tickets"
-);
-
-const tickets =
-await resposta.json();
-
 const box =
 document.getElementById(
 "ticketsAdmin"
@@ -465,93 +461,25 @@ document.getElementById(
 
 if(!box) return;
 
-box.innerHTML = "";
+box.innerHTML =
 
-/* LOOP */
-tickets.forEach(ticket => {
+`
 
-const div =
-document.createElement(
-"div"
-);
-
-div.classList.add(
-"ticket-admin"
-);
-
-div.innerHTML = `
+<div class="ticket-admin">
 
 <h3>
-${ticket.assunto}
+Sistema Firebase
 </h3>
 
 <p>
-${ticket.mensagem}
+Tickets foram desativados
+temporariamente.
+
 </p>
 
-<textarea
-id="resp-${ticket.id}">
-
-</textarea>
-
-<button
-onclick="responderTicket(${ticket.id})">
-
-Responder
-
-</button>
+</div>
 
 `;
-
-box.appendChild(div);
-
-});
-
-}
-
-/* =========================
-RESPONDER
-========================= */
-
-async function responderTicket(id) {
-
-const resposta =
-
-document.getElementById(
-`resp-${id}`
-).value;
-
-await fetch(
-
-"http://localhost:3000/ticket/responder",
-
-{
-
-method: "POST",
-
-headers: {
-
-"Content-Type":
-"application/json"
-
-},
-
-body: JSON.stringify({
-
-id,
-resposta
-
-})
-
-}
-
-);
-
-alert(
-"Ticket respondido!"
-);
-
-carregarTickets();
 
 }
 
@@ -561,35 +489,19 @@ DASHBOARD
 
 async function carregarDashboard() {
 
-const produtosRes =
-await fetch(
-"http://localhost:3000/produtos"
+const snapshot =
+
+await getDocs(
+
+collection(db, "produtos")
+
 );
 
-const produtos =
-await produtosRes.json();
+const produtos = [];
 
-const pedidosRes =
-await fetch(
-"http://localhost:3000/pedidos"
-);
+snapshot.forEach(doc => {
 
-const pedidos =
-await pedidosRes.json();
-
-const ticketsRes =
-await fetch(
-"http://localhost:3000/tickets"
-);
-
-const tickets =
-await ticketsRes.json();
-
-let vendas = 0;
-
-pedidos.forEach(p => {
-
-vendas += p.total;
+produtos.push(doc.data());
 
 });
 
@@ -601,21 +513,22 @@ produtos.length;
 document.getElementById(
 "totalPedidos"
 ).innerText =
-pedidos.length;
+0;
 
 document.getElementById(
 "totalTickets"
 ).innerText =
-tickets.length;
+0;
 
 document.getElementById(
 "totalVendas"
 ).innerText =
-`R$ ${vendas.toFixed(2)}`;
+"R$ 0,00";
 
 }
 
 /* INIT */
+
 carregarProdutos();
 
 carregarTickets();

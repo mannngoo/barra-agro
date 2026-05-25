@@ -10,7 +10,7 @@ params.get("id");
 /* PEGAR PRODUTO */
 fetch(
 
-`http://localhost:3000/produto/${id}`
+
 
 )
 
@@ -42,7 +42,7 @@ return;
 /* COTAÇÃO */
 fetch(
 
-`http://localhost:3000/cotacao/${produto.tipoCotacao}`
+
 
 )
 
