@@ -2,29 +2,28 @@
 DEPENDÊNCIAS
 ========================= */
 
-const cors =
-require("cors");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+const express = require("express");
+const Database = require("better-sqlite3");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-const bcrypt =
-require("bcrypt");
+const app = express();
 
-const express =
-require("express");
+/* =========================
+PATHS
+========================= */
 
-const sqlite3 =
-require("sqlite3").verbose();
+const ROOT =
+path.resolve(__dirname, "..");
 
-const multer =
-require("multer");
+const UPLOADS =
+path.join(__dirname, "uploads");
 
-const path =
-require("path");
-
-const fs =
-require("fs");
-
-const app =
-express();
+const DATABASE =
+path.join(__dirname, "database.db");
 
 /* =========================
 MIDDLEWARE
@@ -34,34 +33,49 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use(express.urlencoded({
+extended: true
+}));
+
+/* =========================
+STATIC
+========================= */
+
+app.use(
+express.static(ROOT)
+);
+
+app.use(
+"/uploads",
+express.static(UPLOADS)
+);
+
 /* =========================
 UPLOADS
 ========================= */
 
-if(!fs.existsSync("./uploads")) {
+if(!fs.existsSync(UPLOADS)) {
 
-fs.mkdirSync("./uploads");
+fs.mkdirSync(UPLOADS);
 
 }
 
-/* STATIC */
-app.use(
+/* =========================
+MULTER
+========================= */
 
-"/uploads",
-
-express.static(
-path.join(__dirname, "uploads")
-)
-
-);
-
-/* STORAGE */
 const storage =
-
 multer.diskStorage({
 
 destination:
-path.join(__dirname, "uploads"),
+(req, file, cb) => {
+
+cb(
+null,
+UPLOADS
+);
+
+},
 
 filename:
 (req, file, cb) => {
@@ -71,7 +85,9 @@ cb(
 null,
 
 Date.now() +
-path.extname(file.originalname)
+path.extname(
+file.originalname
+)
 
 );
 
@@ -80,22 +96,22 @@ path.extname(file.originalname)
 });
 
 const upload =
-multer({ storage });
+multer({
+storage
+});
 
 /* =========================
 BANCO
 ========================= */
 
 const db =
-new sqlite3.Database(
-"./database.db"
-);
+new Database(DATABASE);
 
 /* =========================
-TABELA PRODUTOS
+CRIAR TABELAS
 ========================= */
 
-db.run(`
+db.prepare(`
 
 CREATE TABLE IF NOT EXISTS produtos (
 
@@ -115,13 +131,9 @@ tipoCotacao TEXT
 
 )
 
-`);
+`).run();
 
-/* =========================
-TABELA USUÁRIOS
-========================= */
-
-db.run(`
+db.prepare(`
 
 CREATE TABLE IF NOT EXISTS usuarios (
 
@@ -139,13 +151,9 @@ admin INTEGER DEFAULT 0
 
 )
 
-`);
+`).run();
 
-/* =========================
-TABELA TICKETS
-========================= */
-
-db.run(`
+db.prepare(`
 
 CREATE TABLE IF NOT EXISTS tickets (
 
@@ -169,13 +177,9 @@ data TEXT
 
 )
 
-`);
+`).run();
 
-/* =========================
-TABELA PEDIDOS
-========================= */
-
-db.run(`
+db.prepare(`
 
 CREATE TABLE IF NOT EXISTS pedidos (
 
@@ -193,13 +197,9 @@ data TEXT
 
 )
 
-`);
+`).run();
 
-/* =========================
-TABELA PEDIDO PRODUTOS
-========================= */
-
-db.run(`
+db.prepare(`
 
 CREATE TABLE IF NOT EXISTS pedido_produtos (
 
@@ -217,7 +217,37 @@ imagem TEXT
 
 )
 
-`);
+`).run();
+
+/* =========================
+HOME
+========================= */
+
+app.get("/", (req, res) => {
+
+res.sendFile(
+path.join(ROOT, "index.html")
+);
+
+});
+
+/* =========================
+PAGES
+========================= */
+
+app.get("/pages/:page", (req, res) => {
+
+res.sendFile(
+
+path.join(
+ROOT,
+"pages",
+req.params.page
+)
+
+);
+
+});
 
 /* =========================
 LISTAR PRODUTOS
@@ -225,27 +255,31 @@ LISTAR PRODUTOS
 
 app.get("/produtos", (req, res) => {
 
-db.all(
+try {
 
-"SELECT * FROM produtos",
+const produtos =
+db.prepare(
 
-[],
+"SELECT * FROM produtos ORDER BY id DESC"
 
-(err, rows) => {
+).all();
 
-if(err) {
-
-return res
-.status(500)
-.json(err);
+res.json(produtos);
 
 }
 
-res.json(rows);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro ao buscar produtos"
+
+});
 
 }
-
-);
 
 });
 
@@ -255,36 +289,34 @@ PRODUTO POR ID
 
 app.get("/produto/:id", (req, res) => {
 
-const id =
-req.params.id;
+try {
 
-db.get(
+const produto =
+db.prepare(
 
-"SELECT * FROM produtos WHERE id = ?",
+"SELECT * FROM produtos WHERE id = ?"
 
-[id],
+).get(req.params.id);
 
-(err, row) => {
-
-if(err) {
-
-return res
-.status(500)
-.json(err);
+res.json(produto);
 
 }
 
-res.json(row);
+catch(err) {
 
-}
+console.log(err);
 
-);
+res.status(500).json({
+
+erro:
+"Erro ao buscar produto"
 
 });
 
-/* =========================
-CADASTRAR PRODUTO
-========================= */
+}
+
+});
+
 /* =========================
 CADASTRAR PRODUTO
 ========================= */
@@ -299,20 +331,15 @@ upload.single("imagem"),
 
 try {
 
-const nome =
-req.body.nome;
+const {
 
-const preco =
-req.body.preco;
+nome,
+preco,
+categoria,
+unidade,
+tipoCotacao
 
-const categoria =
-req.body.categoria;
-
-const unidade =
-req.body.unidade;
-
-const tipoCotacao =
-req.body.tipoCotacao;
+} = req.body;
 
 /* IMG */
 let imagem =
@@ -328,9 +355,7 @@ req.file.filename;
 }
 
 /* INSERT */
-db.run(
-
-`
+db.prepare(`
 
 INSERT INTO produtos (
 
@@ -345,9 +370,7 @@ tipoCotacao
 
 VALUES (?, ?, ?, ?, ?, ?)
 
-`,
-
-[
+`).run(
 
 nome,
 preco,
@@ -356,34 +379,13 @@ categoria,
 unidade,
 tipoCotacao
 
-],
-
-function(err) {
-
-if(err) {
-
-console.log(err);
-
-return res
-.status(500)
-.json({
-
-erro:
-"Erro ao salvar produto"
-
-});
-
-}
+);
 
 res.json({
 
 sucesso: true
 
 });
-
-}
-
-);
 
 }
 
@@ -394,7 +396,7 @@ console.log(err);
 res.status(500).json({
 
 erro:
-"Erro no servidor"
+"Erro ao cadastrar produto"
 
 });
 
@@ -408,24 +410,13 @@ DELETAR PRODUTO
 
 app.delete("/produto/:id", (req, res) => {
 
-const id =
-req.params.id;
+try {
 
-db.run(
+db.prepare(
 
-"DELETE FROM produtos WHERE id = ?",
+"DELETE FROM produtos WHERE id = ?"
 
-[id],
-
-function(err) {
-
-if(err) {
-
-return res
-.status(500)
-.json(err);
-
-}
+).run(req.params.id);
 
 res.json({
 
@@ -435,7 +426,18 @@ sucesso: true
 
 }
 
-);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro ao deletar produto"
+
+});
+
+}
 
 });
 
@@ -500,7 +502,6 @@ senha
 
 /* FOTO */
 let foto =
-
 "/uploads/default-user.png";
 
 if(req.file) {
@@ -513,16 +514,13 @@ req.file.filename;
 
 /* HASH */
 const senhaHash =
-
 await bcrypt.hash(
 senha,
 10
 );
 
 /* INSERT */
-db.run(
-
-`
+db.prepare(`
 
 INSERT INTO usuarios (
 
@@ -535,33 +533,14 @@ foto
 
 VALUES (?, ?, ?, ?)
 
-`,
-
-[
+`).run(
 
 nome,
 email,
 senhaHash,
 foto
 
-],
-
-function(err) {
-
-if(err) {
-
-console.log(err);
-
-return res
-.status(500)
-.json({
-
-erro:
-"Email já cadastrado"
-
-});
-
-}
+);
 
 res.json({
 
@@ -571,15 +550,16 @@ sucesso: true
 
 }
 
-);
-
-}
-
 catch(err) {
 
 console.log(err);
 
-res.status(500).json(err);
+res.status(500).json({
+
+erro:
+"Erro no cadastro"
+
+});
 
 }
 
@@ -589,7 +569,9 @@ res.status(500).json(err);
 LOGIN
 ========================= */
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
+
+try {
 
 const {
 
@@ -598,15 +580,14 @@ senha
 
 } = req.body;
 
-db.get(
+const usuario =
+db.prepare(
 
-"SELECT * FROM usuarios WHERE email = ?",
+"SELECT * FROM usuarios WHERE email = ?"
 
-[email],
+).get(email);
 
-async (err, usuario) => {
-
-if(err || !usuario) {
+if(!usuario) {
 
 return res
 .status(401)
@@ -620,7 +601,6 @@ erro:
 }
 
 const senhaCorreta =
-
 await bcrypt.compare(
 
 senha,
@@ -648,13 +628,9 @@ sucesso: true,
 usuario: {
 
 id: usuario.id,
-
 nome: usuario.nome,
-
 email: usuario.email,
-
 foto: usuario.foto,
-
 admin: usuario.admin
 
 }
@@ -663,7 +639,18 @@ admin: usuario.admin
 
 }
 
-);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro no login"
+
+});
+
+}
 
 });
 
@@ -672,6 +659,8 @@ CRIAR PEDIDO
 ========================= */
 
 app.post("/pedido", (req, res) => {
+
+try {
 
 const {
 
@@ -682,10 +671,9 @@ frete
 
 } = req.body;
 
-/* INSERT PEDIDO */
-db.run(
-
-`
+/* INSERT */
+const pedido =
+db.prepare(`
 
 INSERT INTO pedidos (
 
@@ -699,9 +687,7 @@ data
 
 VALUES (?, ?, ?, ?, ?)
 
-`,
-
-[
+`).run(
 
 usuarioId || null,
 total,
@@ -709,29 +695,15 @@ frete,
 "Aguardando pagamento",
 new Date().toLocaleString()
 
-],
-
-function(err) {
-
-if(err) {
-
-console.log(err);
-
-return res
-.status(500)
-.json(err);
-
-}
+);
 
 const pedidoId =
-this.lastID;
+pedido.lastInsertRowid;
 
 /* LOOP */
 produtos.forEach(produto => {
 
-db.run(
-
-`
+db.prepare(`
 
 INSERT INTO pedido_produtos (
 
@@ -745,9 +717,7 @@ imagem
 
 VALUES (?, ?, ?, ?, ?)
 
-`,
-
-[
+`).run(
 
 pedidoId,
 produto.id || null,
@@ -755,13 +725,10 @@ produto.nome,
 produto.preco,
 produto.imagem || ""
 
-]
-
 );
 
 });
 
-/* RESPONSE */
 res.json({
 
 sucesso: true,
@@ -771,7 +738,18 @@ pedidoId
 
 }
 
-);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro ao criar pedido"
+
+});
+
+}
 
 });
 
@@ -781,27 +759,31 @@ LISTAR PEDIDOS
 
 app.get("/pedidos", (req, res) => {
 
-db.all(
+try {
 
-"SELECT * FROM pedidos ORDER BY id DESC",
+const pedidos =
+db.prepare(
 
-[],
+"SELECT * FROM pedidos ORDER BY id DESC"
 
-(err, rows) => {
+).all();
 
-if(err) {
-
-return res
-.status(500)
-.json(err);
+res.json(pedidos);
 
 }
 
-res.json(rows);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro ao buscar pedidos"
+
+});
 
 }
-
-);
 
 });
 
@@ -810,6 +792,8 @@ ABRIR TICKET
 ========================= */
 
 app.post("/ticket", (req, res) => {
+
+try {
 
 const {
 
@@ -821,9 +805,7 @@ mensagem
 
 } = req.body;
 
-db.run(
-
-`
+db.prepare(`
 
 INSERT INTO tickets (
 
@@ -840,9 +822,7 @@ data
 
 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 
-`,
-
-[
+`).run(
 
 usuarioId,
 nome,
@@ -853,17 +833,7 @@ mensagem,
 "Aberto",
 new Date().toLocaleString()
 
-],
-
-function(err) {
-
-if(err) {
-
-return res
-.status(500)
-.json(err);
-
-}
+);
 
 res.json({
 
@@ -873,7 +843,18 @@ sucesso: true
 
 }
 
-);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro ao abrir ticket"
+
+});
+
+}
 
 });
 
@@ -883,27 +864,31 @@ LISTAR TICKETS
 
 app.get("/tickets", (req, res) => {
 
-db.all(
+try {
 
-"SELECT * FROM tickets ORDER BY id DESC",
+const tickets =
+db.prepare(
 
-[],
+"SELECT * FROM tickets ORDER BY id DESC"
 
-(err, rows) => {
+).all();
 
-if(err) {
-
-return res
-.status(500)
-.json(err);
+res.json(tickets);
 
 }
 
-res.json(rows);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro ao buscar tickets"
+
+});
 
 }
-
-);
 
 });
 
@@ -913,6 +898,8 @@ RESPONDER TICKET
 
 app.post("/ticket/responder", (req, res) => {
 
+try {
+
 const {
 
 id,
@@ -920,9 +907,7 @@ resposta
 
 } = req.body;
 
-db.run(
-
-`
+db.prepare(`
 
 UPDATE tickets
 
@@ -931,25 +916,13 @@ status = ?
 
 WHERE id = ?
 
-`,
-
-[
+`).run(
 
 resposta,
 "Respondido",
 id
 
-],
-
-function(err) {
-
-if(err) {
-
-return res
-.status(500)
-.json(err);
-
-}
+);
 
 res.json({
 
@@ -959,7 +932,18 @@ sucesso: true
 
 }
 
-);
+catch(err) {
+
+console.log(err);
+
+res.status(500).json({
+
+erro:
+"Erro ao responder ticket"
+
+});
+
+}
 
 });
 
@@ -967,10 +951,15 @@ sucesso: true
 SERVER
 ========================= */
 
-app.listen(3000, () => {
+const PORT =
+process.env.PORT || 3000;
+
+app.listen(PORT, () => {
 
 console.log(
-"Servidor rodando na porta 3000"
+
+`Servidor rodando na porta ${PORT}`
+
 );
 
-});
+});sqlite3
