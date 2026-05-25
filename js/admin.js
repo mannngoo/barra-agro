@@ -205,6 +205,79 @@ new FileReader();
 
 reader.readAsDataURL(file);
 
+reader.onload = event => {
+
+const img =
+new Image();
+
+img.src =
+event.target.result;
+
+img.onload = () => {
+
+const canvas =
+document.createElement(
+"canvas"
+);
+
+const MAX_WIDTH = 600;
+
+const scaleSize =
+MAX_WIDTH / img.width;
+
+canvas.width =
+MAX_WIDTH;
+
+canvas.height =
+img.height * scaleSize;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.drawImage(
+
+img,
+0,
+0,
+canvas.width,
+canvas.height
+
+);
+
+/* COMPRESS */
+
+const compressedBase64 =
+
+canvas.toDataURL(
+"image/jpeg",
+0.5
+);
+
+resolve(
+compressedBase64
+);
+
+};
+
+};
+
+reader.onerror = error => {
+
+reject(error);
+
+};
+
+});
+
+}
+
+return new Promise((resolve, reject) => {
+
+const reader =
+new FileReader();
+
+reader.readAsDataURL(file);
+
 reader.onload = () => {
 
 resolve(reader.result);
@@ -219,7 +292,7 @@ reject(error);
 
 });
 
-}
+
 
 /* =========================
 RESET FORM
