@@ -1,4 +1,19 @@
 /* =========================
+FIREBASE
+========================= */
+
+const auth = window.auth;
+
+const createUserWithEmailAndPassword =
+window.createUserWithEmailAndPassword;
+
+const signInWithEmailAndPassword =
+window.signInWithEmailAndPassword;
+
+const signOutFirebase =
+window.signOut;
+
+/* =========================
 USUÁRIO
 ========================= */
 
@@ -11,6 +26,7 @@ localStorage.getItem(
 );
 
 /* ELEMENTOS */
+
 const foto =
 document.getElementById(
 "user-photo"
@@ -43,6 +59,7 @@ USER
 if(usuario) {
 
 /* BTN */
+
 if(userButton) {
 
 userButton.style.display =
@@ -50,81 +67,57 @@ userButton.style.display =
 
 }
 
-/* FOTO PERFIL */
+/* FOTO */
+
 if(foto) {
 
-if(
-
-usuario.foto &&
-usuario.foto !== ""
-
-) {
-
 foto.src =
 
-`http://localhost:3000${usuario.foto}`;
+usuario.foto ||
 
-}
+"/assets/images/default-user.png";
 
-else {
-
-foto.src =
-"./assets/images/default-user.png";
-
-}
-
-/* ERRO IMG */
 foto.onerror = function() {
 
 this.src =
-"./assets/images/default-user.png";
+"/assets/images/default-user.png";
 
 };
 
 }
 
 /* MENU FOTO */
+
 if(menuPhoto) {
 
-if(
-
-usuario.foto &&
-usuario.foto !== ""
-
-) {
-
 menuPhoto.src =
 
-`http://localhost:3000${usuario.foto}`;
+usuario.foto ||
 
-}
+"/assets/images/default-user.png";
 
-else {
-
-menuPhoto.src =
-"./assets/images/default-user.png";
-
-}
-
-/* ERRO IMG */
 menuPhoto.onerror = function() {
 
 this.src =
-"./assets/images/default-user.png";
+"/assets/images/default-user.png";
 
 };
 
 }
 
 /* NOME */
+
 if(nome) {
 
 nome.innerText =
-usuario.nome;
+
+usuario.nome ||
+"Usuário";
 
 }
 
 /* ESCONDER LOGIN */
+
 const authButtons =
 
 document.querySelector(
@@ -161,6 +154,7 @@ userMenu.classList.toggle(
 }
 
 /* FECHAR MENU */
+
 document.addEventListener(
 
 "click",
@@ -183,13 +177,25 @@ userMenu.classList.remove(
 LOGOUT
 ========================= */
 
-function logout() {
+async function logout() {
+
+try {
+
+await signOutFirebase(auth);
 
 localStorage.removeItem(
 "usuario"
 );
 
 window.location.reload();
+
+}
+
+catch(err) {
+
+console.log(err);
+
+}
 
 }
 
@@ -222,22 +228,25 @@ carrinho.length;
 
 }
 
-/* ABRIR */
+/* =========================
+ABRIR CARRINHO
+========================= */
+
 function abrirCarrinho() {
 
 window.location.href =
-"./pages/carrinho.html";
+"/pages/carrinho.html";
 
 }
 
 /* =========================
-PRODUTOS
+ABRIR PRODUTOS
 ========================= */
 
 function abrirProdutos() {
 
 window.location.href =
-"./pages/produtos.html";
+"/pages/produtos.html";
 
 }
 
@@ -249,7 +258,7 @@ function abrirProduto(id) {
 
 window.location.href =
 
-`./pages/produto.html?id=${id}`;
+`/pages/produto.html?id=${id}`;
 
 }
 
@@ -257,20 +266,22 @@ window.location.href =
 ADICIONAR CARRINHO
 ========================= */
 
-async function adicionarCarrinho(id) {
+function adicionarCarrinho(id) {
 
-try {
-
-const resposta =
-
-await fetch(
-
-`http://localhost:3000/produto/${id}`
-
-);
+const produtos =
+window.produtosFirebase || [];
 
 const produto =
-await resposta.json();
+
+produtos.find(p => p.id === id);
+
+if(!produto) {
+
+return alert(
+"Produto não encontrado"
+);
+
+}
 
 let carrinho =
 
@@ -283,9 +294,11 @@ localStorage.getItem(
 ) || [];
 
 /* PUSH */
+
 carrinho.push(produto);
 
 /* SAVE */
+
 localStorage.setItem(
 
 "carrinho",
@@ -295,24 +308,14 @@ JSON.stringify(carrinho)
 );
 
 /* UPDATE */
+
 atualizarCarrinho();
 
 /* ALERT */
+
 alert(
 "Produto adicionado!"
 );
-
-}
-
-catch(err) {
-
-console.log(err);
-
-alert(
-"Erro ao adicionar"
-);
-
-}
 
 }
 
@@ -382,85 +385,46 @@ document.getElementById(
 "cadastroSenha"
 ).value;
 
-const fotoInput =
+/* FIREBASE */
 
-document.getElementById(
-"cadastroFoto"
-);
+const userCredential =
 
-/* FORM DATA */
-const formData =
-new FormData();
+await createUserWithEmailAndPassword(
 
-formData.append(
-"nome",
-nome
-);
-
-formData.append(
-"email",
-email
-);
-
-formData.append(
-"senha",
+auth,
+email,
 senha
-);
-
-/* FOTO */
-if(
-fotoInput &&
-fotoInput.files[0]
-) {
-
-formData.append(
-
-"foto",
-
-fotoInput.files[0]
 
 );
 
-}
+const usuario = {
 
-/* FETCH */
-const resposta =
+uid:
+userCredential.user.uid,
 
-await fetch(
+nome,
+email,
 
-"http://localhost:3000/cadastro",
+foto:
+"/assets/images/default-user.png"
 
-{
+};
 
-method: "POST",
+/* SAVE */
 
-body: formData
+localStorage.setItem(
 
-}
+"usuario",
+
+JSON.stringify(usuario)
 
 );
-
-const dados =
-await resposta.json();
-
-/* SUCESSO */
-if(dados.sucesso) {
 
 alert(
 "Conta criada!"
 );
 
-fecharModais();
-
-}
-
-else {
-
-alert(
-dados.erro
-);
-
-}
+window.location.reload();
 
 }
 
@@ -469,7 +433,7 @@ catch(err) {
 console.log(err);
 
 alert(
-"Erro no servidor"
+err.message
 );
 
 }
@@ -496,46 +460,37 @@ document.getElementById(
 "loginSenha"
 ).value;
 
-const resposta =
+const userCredential =
 
-await fetch(
+await signInWithEmailAndPassword(
 
-"http://localhost:3000/login",
-
-{
-
-method: "POST",
-
-headers: {
-
-"Content-Type":
-"application/json"
-
-},
-
-body: JSON.stringify({
-
+auth,
 email,
 senha
 
-})
-
-}
-
 );
 
-const dados =
-await resposta.json();
+const usuario = {
 
-if(dados.sucesso) {
+uid:
+userCredential.user.uid,
+
+email:
+userCredential.user.email,
+
+nome:
+userCredential.user.email,
+
+foto:
+"/assets/images/default-user.png"
+
+};
 
 localStorage.setItem(
 
 "usuario",
 
-JSON.stringify(
-dados.usuario
-)
+JSON.stringify(usuario)
 
 );
 
@@ -547,27 +502,20 @@ window.location.reload();
 
 }
 
-else {
-
-alert(
-dados.erro
-);
-
-}
-
-}
-
 catch(err) {
 
 console.log(err);
 
 alert(
-"Erro no servidor"
+"Email ou senha inválidos"
 );
 
 }
 
 }
 
-/* INIT */
+/* =========================
+INIT
+========================= */
+
 atualizarCarrinho();
