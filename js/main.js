@@ -1,6 +1,3 @@
-/* =========================
-FIREBASE
-========================= */
 import {
 
 auth,
@@ -11,16 +8,6 @@ signOut
 }
 
 from "./firebase.js";
-const auth = window.auth;
-
-const createUserWithEmailAndPassword =
-window.firebaseCreateUser;
-
-const signInWithEmailAndPassword =
-window.firebaseLogin
-
-const signOutFirebase =
-window.signOut;
 
 /* =========================
 USUÁRIO
@@ -67,16 +54,12 @@ USER
 
 if(usuario) {
 
-/* BTN */
-
 if(userButton) {
 
 userButton.style.display =
 "flex";
 
 }
-
-/* FOTO */
 
 if(foto) {
 
@@ -86,16 +69,7 @@ usuario.foto ||
 
 "/assets/images/default-user.png";
 
-foto.onerror = function() {
-
-this.src =
-"/assets/images/default-user.png";
-
-};
-
 }
-
-/* MENU FOTO */
 
 if(menuPhoto) {
 
@@ -105,16 +79,7 @@ usuario.foto ||
 
 "/assets/images/default-user.png";
 
-menuPhoto.onerror = function() {
-
-this.src =
-"/assets/images/default-user.png";
-
-};
-
 }
-
-/* NOME */
 
 if(nome) {
 
@@ -124,8 +89,6 @@ usuario.nome ||
 "Usuário";
 
 }
-
-/* ESCONDER LOGIN */
 
 const authButtons =
 
@@ -143,10 +106,11 @@ authButtons.style.display =
 }
 
 /* =========================
-MENU USER
+MENU
 ========================= */
 
-function toggleMenu(event) {
+window.toggleMenu =
+function(event) {
 
 if(event) {
 
@@ -160,9 +124,11 @@ userMenu.classList.toggle(
 "active"
 );
 
-}
+};
 
-/* FECHAR MENU */
+/* =========================
+FECHAR MENU
+========================= */
 
 document.addEventListener(
 
@@ -186,11 +152,10 @@ userMenu.classList.remove(
 LOGOUT
 ========================= */
 
-async function logout() {
+window.logout =
+async function() {
 
-try {
-
-await signOutFirebase(auth);
+await signOut(auth);
 
 localStorage.removeItem(
 "usuario"
@@ -198,21 +163,14 @@ localStorage.removeItem(
 
 window.location.reload();
 
-}
-
-catch(err) {
-
-console.log(err);
-
-}
-
-}
+};
 
 /* =========================
 CARRINHO
 ========================= */
 
-function atualizarCarrinho() {
+window.atualizarCarrinho =
+function() {
 
 const carrinho =
 
@@ -235,104 +193,14 @@ carrinho.length;
 
 }
 
-}
-
-/* =========================
-ABRIR CARRINHO
-========================= */
-
-function abrirCarrinho() {
-
-window.location.href =
-"/pages/carrinho.html";
-
-}
-
-/* =========================
-ABRIR PRODUTOS
-========================= */
-
-function abrirProdutos() {
-
-window.location.href =
-"/pages/produtos.html";
-
-}
-
-/* =========================
-ABRIR PRODUTO
-========================= */
-
-function abrirProduto(id) {
-
-window.location.href =
-
-`/pages/produto.html?id=${id}`;
-
-}
-
-/* =========================
-ADICIONAR CARRINHO
-========================= */
-
-function adicionarCarrinho(id) {
-
-const produtos =
-window.produtosFirebase || [];
-
-const produto =
-
-produtos.find(p => p.id === id);
-
-if(!produto) {
-
-return alert(
-"Produto não encontrado"
-);
-
-}
-
-let carrinho =
-
-JSON.parse(
-
-localStorage.getItem(
-"carrinho"
-)
-
-) || [];
-
-/* PUSH */
-
-carrinho.push(produto);
-
-/* SAVE */
-
-localStorage.setItem(
-
-"carrinho",
-
-JSON.stringify(carrinho)
-
-);
-
-/* UPDATE */
-
-atualizarCarrinho();
-
-/* ALERT */
-
-alert(
-"Produto adicionado!"
-);
-
-}
+};
 
 /* =========================
 MODAIS
 ========================= */
 
-function abrirLogin() {
+window.abrirLogin =
+function() {
 
 document.getElementById(
 "loginModal"
@@ -340,9 +208,10 @@ document.getElementById(
 "active"
 );
 
-}
+};
 
-function abrirCadastro() {
+window.abrirCadastro =
+function() {
 
 document.getElementById(
 "cadastroModal"
@@ -350,9 +219,10 @@ document.getElementById(
 "active"
 );
 
-}
+};
 
-function fecharModais() {
+window.fecharModais =
+function() {
 
 document.getElementById(
 "loginModal"
@@ -366,13 +236,14 @@ document.getElementById(
 "active"
 );
 
-}
+};
 
 /* =========================
 CADASTRO
 ========================= */
 
-async function cadastrar() {
+window.cadastrar =
+async function() {
 
 try {
 
@@ -393,8 +264,6 @@ const senha =
 document.getElementById(
 "cadastroSenha"
 ).value;
-
-/* FIREBASE */
 
 const userCredential =
 
@@ -419,8 +288,6 @@ foto:
 
 };
 
-/* SAVE */
-
 localStorage.setItem(
 
 "usuario",
@@ -441,19 +308,18 @@ catch(err) {
 
 console.log(err);
 
-alert(
-err.message
-);
+alert(err.message);
 
 }
 
-}
+};
 
 /* =========================
 LOGIN
 ========================= */
 
-async function login() {
+window.login =
+async function() {
 
 try {
 
@@ -521,10 +387,8 @@ alert(
 
 }
 
-}
+};
 
-/* =========================
-INIT
-========================= */
+/* INIT */
 
-atualizarCarrinho();
+window.atualizarCarrinho();
