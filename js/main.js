@@ -400,6 +400,6 @@ window.abrirCarrinho =
 function() {
 
 window.location.href =
-"/pages/carrinho.html";
+"/carrinho.html";
 
 };
