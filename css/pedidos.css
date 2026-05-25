@@ -1,0 +1,465 @@
+* {
+
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+
+}
+
+body {
+
+background:
+linear-gradient(
+180deg,
+#03150d 0%,
+#021008 100%
+);
+
+font-family:
+Arial, sans-serif;
+
+color: white;
+
+min-height: 100vh;
+
+}
+
+/* =========================
+HEADER
+========================= */
+
+.header-premium {
+
+width: 100%;
+
+height: 90px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+padding: 0 50px;
+
+background:
+rgba(0,0,0,.25);
+
+backdrop-filter:
+blur(14px);
+
+border-bottom:
+1px solid rgba(255,255,255,.05);
+
+position: sticky;
+
+top: 0;
+
+z-index: 999;
+
+}
+
+.logo {
+
+width: 180px;
+
+object-fit: contain;
+
+}
+
+/* =========================
+BTN
+========================= */
+
+.voltar-btn {
+
+background:
+linear-gradient(
+135deg,
+#1fc15a,
+#11853d
+);
+
+border: none;
+
+color: white;
+
+padding: 14px 24px;
+
+border-radius: 18px;
+
+font-size: 15px;
+
+font-weight: 700;
+
+cursor: pointer;
+
+transition: .3s;
+
+box-shadow:
+0 10px 30px rgba(31,193,90,.25);
+
+}
+
+.voltar-btn:hover {
+
+transform:
+translateY(-3px);
+
+}
+
+/* =========================
+CONTAINER
+========================= */
+
+.pedidos-container {
+
+width: 92%;
+
+max-width: 1300px;
+
+margin: 50px auto;
+
+}
+
+/* =========================
+TITLE
+========================= */
+
+.pedidos-title {
+
+font-size: 48px;
+
+font-weight: 800;
+
+margin-bottom: 40px;
+
+}
+
+/* =========================
+CARD
+========================= */
+
+.pedido-card {
+
+background:
+linear-gradient(
+180deg,
+rgba(0,60,30,.9),
+rgba(0,20,10,.95)
+);
+
+border:
+1px solid rgba(31,193,90,.12);
+
+border-radius: 30px;
+
+padding: 35px;
+
+margin-bottom: 30px;
+
+box-shadow:
+0 10px 40px rgba(0,0,0,.35);
+
+transition: .3s;
+
+}
+
+.pedido-card:hover {
+
+transform:
+translateY(-4px);
+
+}
+
+/* =========================
+TOP
+========================= */
+
+.pedido-top {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+margin-bottom: 30px;
+
+gap: 20px;
+
+flex-wrap: wrap;
+
+}
+
+.pedido-id {
+
+font-size: 24px;
+
+font-weight: 700;
+
+}
+
+.pedido-status {
+
+padding: 12px 20px;
+
+border-radius: 999px;
+
+background:
+rgba(31,193,90,.15);
+
+border:
+1px solid #1fc15a;
+
+color:
+#29d466;
+
+font-weight: 700;
+
+}
+
+/* =========================
+PRODUTOS
+========================= */
+
+.pedido-produtos {
+
+display: flex;
+
+flex-direction: column;
+
+gap: 18px;
+
+}
+
+.produto-item {
+
+display: flex;
+
+align-items: center;
+
+gap: 20px;
+
+background:
+rgba(255,255,255,.03);
+
+padding: 18px;
+
+border-radius: 24px;
+
+}
+
+.produto-item img {
+
+width: 100px;
+
+height: 100px;
+
+border-radius: 20px;
+
+object-fit: cover;
+
+}
+
+.produto-info h3 {
+
+font-size: 20px;
+
+margin-bottom: 6px;
+
+}
+
+.produto-info p {
+
+opacity: .7;
+
+}
+
+/* =========================
+BOTTOM
+========================= */
+
+.pedido-bottom {
+
+margin-top: 30px;
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+flex-wrap: wrap;
+
+gap: 20px;
+
+}
+
+.pedido-total {
+
+font-size: 32px;
+
+font-weight: 800;
+
+color:
+#29d466;
+
+}
+
+/* =========================
+TIMELINE
+========================= */
+
+.timeline {
+
+margin-top: 35px;
+
+display: grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(170px,1fr));
+
+gap: 15px;
+
+}
+
+.timeline-step {
+
+background:
+rgba(255,255,255,.03);
+
+padding: 20px;
+
+border-radius: 22px;
+
+border:
+1px solid rgba(255,255,255,.05);
+
+text-align: center;
+
+}
+
+.timeline-step.active {
+
+background:
+rgba(31,193,90,.12);
+
+border:
+1px solid #1fc15a;
+
+}
+
+.timeline-step h4 {
+
+margin-top: 10px;
+
+margin-bottom: 5px;
+
+}
+
+.timeline-step span {
+
+opacity: .65;
+
+font-size: 14px;
+
+}
+
+/* =========================
+EMPTY
+========================= */
+
+.sem-pedidos {
+
+text-align: center;
+
+padding: 120px 20px;
+
+opacity: .7;
+
+}
+
+.sem-pedidos h2 {
+
+font-size: 32px;
+
+}
+
+/* =========================
+FOOTER
+========================= */
+
+.footer {
+
+margin-top: 80px;
+
+padding: 60px 20px;
+
+border-top:
+1px solid rgba(255,255,255,.05);
+
+background:
+rgba(0,0,0,.2);
+
+}
+
+.footer-content {
+
+display: flex;
+
+flex-direction: column;
+
+align-items: center;
+
+gap: 18px;
+
+}
+
+.footer-logo {
+
+width: 180px;
+
+object-fit: contain;
+
+}
+
+.footer p {
+
+opacity: .6;
+
+font-size: 14px;
+
+}
+
+/* =========================
+RESPONSIVO
+========================= */
+
+@media(max-width:768px) {
+
+.header-premium {
+
+padding: 0 20px;
+
+}
+
+.logo {
+
+width: 140px;
+
+}
+
+.pedidos-title {
+
+font-size: 36px;
+
+}
+
+.pedido-card {
+
+padding: 25px;
+
+}
+
+}

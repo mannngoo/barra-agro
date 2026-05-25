@@ -4,17 +4,6 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 
-getAuth,
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-signOut
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-
 getFirestore,
 collection,
 addDoc,
@@ -25,6 +14,17 @@ deleteDoc
 }
 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 /* CONFIG */
 
@@ -49,23 +49,27 @@ appId: "1:272668777172:web:5b140f852a520ff4de3941"
 const app =
 initializeApp(firebaseConfig);
 
-/* EXPORTS */
+/* FIREBASE */
 
-export const auth =
+const db =
+getFirestore(app);
+
+const auth =
 getAuth(app);
 
-export const db =
-getFirestore(app);
+/* EXPORT */
 
 export {
 
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-signOut,
+db,
+auth,
 collection,
 addDoc,
 getDocs,
 doc,
-deleteDoc
+deleteDoc,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut
 
 };
