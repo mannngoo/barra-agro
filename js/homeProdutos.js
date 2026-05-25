@@ -1,7 +1,3 @@
-/* =========================
-FIREBASE HOME PRODUTOS
-COMPLETO
-========================= */
 import {
 
 db,
@@ -12,12 +8,19 @@ getDocs
 
 from "./firebase.js";
 
+/* =========================
+PRODUTOS
+========================= */
+
+window.produtosFirebase = [];
+
+/* =========================
+CARREGAR PRODUTOS
+========================= */
 
 async function carregarHomeProdutos() {
 
 try {
-
-/* FIREBASE */
 
 const snapshot =
 
@@ -33,8 +36,6 @@ db,
 /* ARRAY */
 
 const produtos = [];
-
-/* LOOP */
 
 snapshot.forEach(doc => {
 
@@ -61,11 +62,9 @@ document.getElementById(
 
 if(!grid) return;
 
-/* CLEAR */
-
 grid.innerHTML = "";
 
-/* LOOP PRODUTOS */
+/* LOOP */
 
 produtos.forEach(produto => {
 
@@ -78,17 +77,14 @@ div.classList.add(
 "home-card"
 );
 
-/* HTML */
-
 div.innerHTML = `
 
 <div class="home-img">
 
 <img
 src="${
-produto.imagem
-? produto.imagem
-: '/assets/images/default-product.jpg'
+produto.imagem ||
+'/assets/images/default-product.jpg'
 }"
 alt="${produto.nome}">
 
@@ -99,29 +95,21 @@ alt="${produto.nome}">
 <div class="home-top">
 
 <span>
-
 ${produto.categoria || "Produto"}
-
 </span>
 
 <small>
-
 ${produto.unidade || ""}
-
 </small>
 
 </div>
 
 <h3>
-
 ${produto.nome}
-
 </h3>
 
 <strong>
-
 R$ ${Number(produto.preco).toFixed(2)}
-
 </strong>
 
 <div class="home-buttons">
@@ -148,8 +136,6 @@ onclick="adicionarCarrinho('${produto.id}')">
 
 `;
 
-/* APPEND */
-
 grid.appendChild(div);
 
 });
@@ -160,10 +146,6 @@ catch(err) {
 
 console.log(err);
 
-alert(
-"Erro ao carregar produtos"
-);
-
 }
 
 }
@@ -172,27 +154,30 @@ alert(
 ABRIR PRODUTO
 ========================= */
 
-function abrirProduto(id) {
+window.abrirProduto =
+function(id) {
 
-
+window.location.href =
 
 `/pages/produto.html?id=${id}`;
 
-}
+};
 
 /* =========================
-ADICIONAR CARRINHO
+CARRINHO
 ========================= */
 
-function adicionarCarrinho(id) {
+window.adicionarCarrinho =
+function(id) {
 
 /* PRODUTOS */
 
 const produtos =
+window.produtosFirebase || [];
 
+/* FIND */
 
-
-
+const produto =
 
 produtos.find(p => p.id === id);
 
@@ -206,7 +191,7 @@ return;
 
 }
 
-/* CARRINHO */
+/* STORAGE */
 
 let carrinho =
 
@@ -234,9 +219,15 @@ JSON.stringify(carrinho)
 
 /* UPDATE */
 
-if(typeof atualizarCarrinho === "function") {
+const contador =
+document.getElementById(
+"cart-count"
+);
 
-atualizarCarrinho();
+if(contador) {
+
+contador.innerText =
+carrinho.length;
 
 }
 
@@ -246,7 +237,7 @@ alert(
 "Produto adicionado!"
 );
 
-}
+};
 
 /* =========================
 INIT
