@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Produtos
+</title>
+
+<link rel="stylesheet"
+href="../css/global.css">
+
+<link rel="stylesheet"
+href="../css/produtos.css">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+
+<nav class="menu">
+
+<a href="../index.html">
+Home
+</a>
+
+<a href="produtos.html">
+Produtos
+</a>
+
+</nav>
+
+<div class="logo">
+
+<img src="../assets/images/logo.png">
+
+</div>
+
+<div class="right">
+
+<div class="cart"
+onclick="abrirCarrinho()">
+
+🛒
+
+<span id="cart-count">
+0
+</span>
+
+</div>
+
+<div class="user-area">
+
+<button class="user-button"
+id="userButton"
+onclick="toggleMenu(event)">
+
+<img id="user-photo"
+src="../assets/images/user.png">
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- MAIN -->
+<main class="produtos-layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar-categorias">
+
+<h2>
+Categorias
+</h2>
+
+<!-- ALIMENTOS -->
+<div class="categoria-box">
+
+<h3>
+Alimentos
+</h3>
+
+<ul>
+
+<li>
+
+<a href="#">
+
+Açúcar
+
+<span>
+12
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Milho
+
+<span>
+22
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Soja
+
+<span>
+14
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Café
+
+<span>
+8
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Arroz
+
+<span>
+5
+</span>
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- ANIMAIS -->
+<div class="categoria-box">
+
+<h3>
+Animais
+</h3>
+
+<ul>
+
+<li>
+
+<a href="#">
+
+Gado
+
+<span>
+9
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Cavalos
+
+<span>
+5
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Aves
+
+<span>
+18
+</span>
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- FERRAMENTAS -->
+<div class="categoria-box">
+
+<h3>
+Ferramentas
+</h3>
+
+<ul>
+
+<li>
+
+<a href="#">
+
+Tratores
+
+<span>
+3
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Pulverizadores
+
+<span>
+7
+</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#">
+
+Colheitadeiras
+
+<span>
+4
+</span>
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</aside>
+
+<!-- PRODUTOS -->
+<section class="produtos-content">
+
+<div class="produtos-top">
+
+<h1>
+
+Produtos disponíveis
+
+</h1>
+
+<p>
+
+Os melhores produtos do agronegócio
+
+</p>
+
+</div>
+
+<div class="grid-produtos"
+id="produtosGrid">
+
+</div>
+
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+<div class="footer-content">
+
+<div class="footer-brand">
+
+<img src="../assets/images/logo.png">
+
+<p>
+
+Tecnologia, confiança e qualidade
+no agronegócio brasileiro.
+
+</p>
+
+</div>
+
+<div class="footer-links">
+
+<h3>
+
+Navegação
+
+</h3>
+
+<a href="../index.html">
+
+Home
+
+</a>
+
+<a href="produtos.html">
+
+Produtos
+
+</a>
+
+<a href="#">
+
+Cotações
+
+</a>
+
+<a href="#">
+
+Contato
+
+</a>
+
+</div>
+
+<div class="footer-contact">
+
+<h3>
+
+Contato
+
+</h3>
+
+<p>
+
+Barraagropecuariaadm@gmail.com
+
+</p>
+
+<p>
+
+(11) 99999-9999
+
+</p>
+
+<p>
+
+Brasil
+
+</p>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+© 2026 Barra Agropecuária —
+Todos os direitos reservados.
+
+</div>
+
+</footer>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/produtos.js"></script>
+
+</body>
+</html>

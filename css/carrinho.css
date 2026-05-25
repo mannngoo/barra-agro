@@ -1,0 +1,614 @@
+/* =========================
+BODY
+========================= */
+
+body {
+
+background:
+#03110b;
+
+color: white;
+
+font-family: Arial, sans-serif;
+
+margin: 0;
+
+padding: 0;
+}
+
+/* =========================
+HEADER
+========================= */
+
+.cart-header {
+
+height: 90px;
+
+padding: 0 60px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+background:
+rgba(0,0,0,0.45);
+
+backdrop-filter: blur(20px);
+
+border-bottom:
+1px solid rgba(255,255,255,0.05);
+
+position: sticky;
+
+top: 0;
+
+z-index: 999;
+}
+
+/* LOGO */
+.cart-logo img {
+
+height: 200px;
+}
+
+/* VOLTAR */
+.voltar {
+
+width: 46px;
+
+height: 46px;
+
+border-radius: 14px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+background:
+rgba(255,255,255,0.05);
+
+text-decoration: none;
+
+color: white;
+
+font-size: 22px;
+
+transition: 0.3s;
+}
+
+.voltar:hover {
+
+background:
+rgba(255,255,255,0.08);
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.cart-layout {
+
+width: 92%;
+
+margin: 50px auto;
+
+display: grid;
+
+grid-template-columns:
+1fr 420px;
+
+gap: 35px;
+
+align-items: start;
+}
+
+/* =========================
+PRODUTOS
+========================= */
+
+.cart-produtos {
+
+padding: 35px;
+
+border-radius: 32px;
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,0.03),
+rgba(255,255,255,0.01)
+);
+
+border:
+1px solid rgba(255,255,255,0.05);
+
+backdrop-filter: blur(18px);
+}
+
+/* TITULO */
+.cart-produtos h2 {
+
+font-size: 34px;
+
+margin-bottom: 35px;
+}
+
+/* GRID */
+.cart-grid {
+
+display: flex;
+
+flex-direction: column;
+
+gap: 22px;
+}
+
+/* ITEM */
+.cart-item {
+
+display: flex;
+
+align-items: center;
+
+gap: 24px;
+
+padding: 24px;
+
+border-radius: 26px;
+
+background:
+rgba(255,255,255,0.03);
+
+border:
+1px solid rgba(255,255,255,0.04);
+
+transition: 0.3s;
+
+position: relative;
+}
+
+.cart-item:hover {
+
+transform: translateY(-3px);
+
+border:
+1px solid rgba(34,197,94,0.25);
+}
+
+/* IMG */
+.cart-item img {
+
+width: 150px;
+
+height: 150px;
+
+border-radius: 24px;
+
+object-fit: cover;
+}
+
+/* INFO */
+.cart-info {
+
+flex: 1;
+}
+
+.cart-info h3 {
+
+font-size: 28px;
+
+margin-bottom: 10px;
+}
+
+.cart-info p {
+
+font-size: 15px;
+
+color: #aaa;
+
+margin-bottom: 18px;
+}
+
+/* PREÇO */
+.cart-info strong {
+
+font-size: 32px;
+
+color: #4ade80;
+}
+
+/* QUANTIDADE */
+.quantidade {
+
+display: flex;
+
+align-items: center;
+
+gap: 12px;
+
+margin-bottom: 20px;
+}
+
+.quantidade button {
+
+width: 42px;
+
+height: 42px;
+
+border-radius: 14px;
+
+border: none;
+
+background:
+rgba(255,255,255,0.05);
+
+color: white;
+
+font-size: 20px;
+
+cursor: pointer;
+
+transition: 0.3s;
+}
+
+.quantidade button:hover {
+
+background:
+rgba(255,255,255,0.1);
+}
+
+/* REMOVE */
+.remove {
+
+position: absolute;
+
+top: 18px;
+
+right: 18px;
+
+width: 42px;
+
+height: 42px;
+
+border: none;
+
+border-radius: 50%;
+
+background:
+rgba(255,0,0,0.15);
+
+color: white;
+
+font-size: 16px;
+
+cursor: pointer;
+
+transition: 0.3s;
+}
+
+.remove:hover {
+
+background:
+rgba(255,0,0,0.3);
+}
+
+/* =========================
+RESUMO
+========================= */
+
+.resumo-box {
+
+padding: 35px;
+
+border-radius: 32px;
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,0.03),
+rgba(255,255,255,0.01)
+);
+
+border:
+1px solid rgba(255,255,255,0.05);
+
+position: sticky;
+
+top: 120px;
+
+backdrop-filter: blur(20px);
+}
+
+/* TITULO */
+.resumo-box h2 {
+
+font-size: 34px;
+
+margin-bottom: 35px;
+}
+
+/* LINHAS */
+.resumo-linha {
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+margin-bottom: 24px;
+
+font-size: 18px;
+}
+
+/* TOTAL */
+.total {
+
+padding-top: 25px;
+
+border-top:
+1px solid rgba(255,255,255,0.08);
+
+font-size: 28px;
+
+font-weight: bold;
+}
+
+/* =========================
+FRETE
+========================= */
+
+.frete-box {
+
+margin-top: 35px;
+}
+
+.frete-box h3 {
+
+margin-bottom: 16px;
+
+font-size: 20px;
+}
+
+/* INPUT */
+.frete-input {
+
+display: flex;
+
+gap: 12px;
+}
+
+.frete-input input {
+
+flex: 1;
+
+height: 55px;
+
+border: none;
+
+border-radius: 16px;
+
+padding: 0 18px;
+
+background:
+rgba(255,255,255,0.05);
+
+color: white;
+
+font-size: 15px;
+
+outline: none;
+}
+
+.frete-input button {
+
+width: 120px;
+
+border: none;
+
+border-radius: 16px;
+
+background: #22c55e;
+
+color: white;
+
+font-weight: bold;
+
+cursor: pointer;
+}
+
+/* RESULTADO */
+.frete-resultado {
+
+margin-top: 18px;
+
+padding: 18px;
+
+border-radius: 18px;
+
+background:
+rgba(255,255,255,0.03);
+
+display: none;
+}
+
+/* =========================
+PAGAMENTO
+========================= */
+
+.pagamento {
+
+margin-top: 40px;
+}
+
+.pagamento h3 {
+
+margin-bottom: 20px;
+
+font-size: 20px;
+}
+
+/* GRID */
+.pagamento-grid {
+
+display: grid;
+
+grid-template-columns:
+1fr 1fr 1fr;
+
+gap: 12px;
+}
+
+/* BOTAO */
+.pay {
+
+height: 58px;
+
+border: none;
+
+border-radius: 18px;
+
+background:
+rgba(255,255,255,0.05);
+
+color: white;
+
+font-size: 15px;
+
+font-weight: 600;
+
+cursor: pointer;
+
+transition: 0.3s;
+}
+
+.pay.active {
+
+background:
+linear-gradient(
+90deg,
+#22c55e,
+#16a34a
+);
+}
+
+.pay:hover {
+
+background:
+rgba(255,255,255,0.1);
+}
+
+/* BANDEIRAS */
+.bandeiras {
+
+display: flex;
+
+flex-wrap: wrap;
+
+gap: 12px;
+
+margin-top: 24px;
+}
+
+.bandeiras img {
+
+height: 34px;
+
+background: white;
+
+padding: 8px 12px;
+
+border-radius: 12px;
+}
+
+/* =========================
+CHECKOUT
+========================= */
+
+.checkout {
+
+width: 100%;
+
+height: 68px;
+
+margin-top: 40px;
+
+border: none;
+
+border-radius: 22px;
+
+background:
+linear-gradient(
+90deg,
+#22c55e,
+#16a34a
+);
+
+color: white;
+
+font-size: 19px;
+
+font-weight: bold;
+
+cursor: pointer;
+
+transition: 0.3s;
+}
+
+.checkout:hover {
+
+transform: translateY(-3px);
+
+box-shadow:
+0 0 35px rgba(34,197,94,0.35);
+}
+
+/* =========================
+FOOTER
+========================= */
+
+.footer {
+
+margin-top: 100px;
+
+padding: 70px 8%;
+
+background:
+rgba(0,0,0,0.4);
+
+border-top:
+1px solid rgba(255,255,255,0.05);
+}
+
+.footer-content {
+
+display: grid;
+
+grid-template-columns:
+1fr 1fr 1fr;
+
+gap: 60px;
+}
+
+.footer h3 {
+
+margin-bottom: 18px;
+
+font-size: 24px;
+}
+
+.footer p,
+.footer a {
+
+display: block;
+
+margin-bottom: 12px;
+
+color: #aaa;
+
+text-decoration: none;
+}

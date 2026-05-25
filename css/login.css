@@ -1,0 +1,141 @@
+body {
+
+    margin: 0;
+
+    font-family: Arial;
+
+    background:
+        linear-gradient(
+            180deg,
+            #021b0f,
+            #06361c
+        );
+
+    height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+/* CONTAINER */
+.login-container {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+/* BOX */
+.login-box {
+
+    width: 420px;
+
+    background:
+        rgba(255,255,255,0.05);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 30px;
+
+    padding: 50px;
+
+    backdrop-filter: blur(12px);
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.35);
+}
+
+/* LOGO */
+.login-logo {
+
+    height: 100px;
+
+    margin-bottom: 20px;
+}
+
+/* TITULO */
+.login-box h1 {
+
+    color: white;
+
+    margin-bottom: 30px;
+}
+
+/* INPUT */
+.login-box input {
+
+    width: 100%;
+
+    padding: 18px;
+
+    margin-bottom: 20px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color: white;
+
+    font-size: 16px;
+}
+
+/* BOTÃO */
+.login-box button {
+
+    width: 100%;
+
+    padding: 18px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #15803d
+        );
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.login-box button:hover {
+
+    transform: scale(1.03);
+
+}
+
+
+.login-box p {
+
+    color:
+        rgba(255,255,255,0.7);
+
+    margin-top: 20px;
+}
+
+.login-box a {
+
+    color: #4ade80;
+
+    text-decoration: none;
+}

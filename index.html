@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Barra Agropecuária
+</title>
+
+<link rel="stylesheet"
+href="css/global.css">
+
+<link rel="stylesheet"
+href="css/home.css">
+
+<link rel="stylesheet"
+href="css/cotacao.css">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+
+<!-- MENU -->
+<nav class="menu">
+
+<a href="index.html">
+Home
+</a>
+
+<a href="pages/produtos.html">
+Produtos
+</a>
+
+</nav>
+
+<!-- LOGO -->
+<div class="logo">
+
+<img
+src="assets/images/logo.png"
+alt="Logo">
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<!-- CARRINHO -->
+<div
+class="cart"
+onclick="abrirCarrinho()">
+
+🛒
+
+<span id="cart-count">
+
+0
+
+</span>
+
+</div>
+
+<!-- LOGIN -->
+<div class="auth-buttons">
+
+<button
+type="button"
+onclick="abrirLogin()">
+
+Entrar
+
+</button>
+
+<button
+type="button"
+onclick="abrirCadastro()">
+
+Cadastrar
+
+</button>
+
+</div>
+
+<!-- USER -->
+<div class="user-area">
+
+<button
+type="button"
+class="user-button"
+id="userButton"
+onclick="toggleMenu(event)">
+
+<img
+id="user-photo"
+src="assets/images/default-user.png"
+alt="">
+
+</button>
+
+<!-- MENU USER -->
+<div
+class="user-menu"
+id="userMenu">
+
+<!-- TOP -->
+<div class="menu-user-top">
+
+<img
+id="menu-photo"
+src="assets/images/default-user.png"
+alt="">
+
+<div>
+
+<h3 id="user-name">
+
+Usuário
+
+</h3>
+
+<p>
+
+Minha conta
+
+</p>
+
+</div>
+
+</div>
+
+<!-- LINKS -->
+<button
+type="button"
+onclick="window.location.href='pages/pedidos.html'">
+
+Meus pedidos
+
+</button>
+
+<button
+type="button"
+onclick="window.location.href='carrinho.html'">
+
+Meu carrinho
+
+</button>
+
+<button
+type="button"
+onclick="window.location.href='pages/suporte.html'">
+
+Suporte
+
+</button>
+
+<button
+type="button"
+onclick="window.location.href='pages/perfil.html'">
+
+Editar perfil
+
+</button>
+
+<!-- LOGOUT -->
+<button
+type="button"
+class="logout-btn"
+onclick="logout()">
+
+Sair
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- HERO -->
+<section class="hero">
+
+<div class="hero-overlay"></div>
+
+<div class="hero-content">
+
+<h1>
+
+Barra Agropecuária
+
+</h1>
+
+<p>
+
+Qualidade direto do campo
+
+</p>
+
+
+</div>
+
+</section>
+
+<!-- MAIN -->
+<main>
+
+<div class="container">
+
+<!-- VIDEO -->
+<section class="card">
+
+<video controls>
+
+<source
+src="assets/video/agro.mp4"
+type="video/mp4">
+
+</video>
+
+</section>
+
+<!-- PRODUTOS -->
+<section class="home-produtos">
+
+<div class="section-title">
+
+<h2>
+
+Produtos em destaque
+
+</h2>
+
+<a href="pages/produtos.html">
+
+Ver todos
+
+</a>
+
+</div>
+
+<div
+class="home-grid"
+id="homeGrid">
+
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+<div class="footer-content">
+
+<!-- BRAND -->
+<div class="footer-brand">
+
+<img
+src="assets/images/logo.png"
+alt="Logo">
+
+<p>
+
+Tecnologia, confiança e qualidade
+no agronegócio brasileiro.
+
+</p>
+
+</div>
+
+<!-- LINKS -->
+<div class="footer-links">
+
+<h3>
+
+Navegação
+
+</h3>
+
+<a href="index.html">
+
+Home
+
+</a>
+
+<a href="pages/produtos.html">
+
+Produtos
+
+</a>
+
+<a href="#">
+
+Cotações
+
+</a>
+
+<a href="#">
+
+Contato
+
+</a>
+
+</div>
+
+<!-- CONTACT -->
+<div class="footer-contact">
+
+<h3>
+
+Contato
+
+</h3>
+
+<p>
+
+Barraagropecuariaadm@gmail.com
+
+</p>
+
+<p>
+
+(21) 99535-8009
+
+</p>
+
+<p>
+
+Brasil
+
+</p>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+© 2026 Barra Agropecuária —
+Todos os direitos reservados.
+
+</div>
+
+</footer>
+
+<!-- LOGIN -->
+<div
+class="modal"
+id="loginModal">
+
+<div class="modal-box">
+
+<!-- FECHAR -->
+<button
+type="button"
+class="fechar-modal"
+onclick="fecharModais()">
+
+✕
+
+</button>
+
+<h2>
+
+Entrar
+
+</h2>
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="loginSenha"
+placeholder="Senha">
+
+<button
+type="button"
+onclick="login()">
+
+Entrar
+
+</button>
+
+</div>
+
+</div>
+
+<!-- CADASTRO -->
+<div
+class="modal"
+id="cadastroModal">
+
+<div class="modal-box">
+
+<!-- FECHAR -->
+<button
+type="button"
+class="fechar-modal"
+onclick="fecharModais()">
+
+✕
+
+</button>
+
+<h2>
+
+Criar conta
+
+</h2>
+
+<input
+type="text"
+id="cadastroNome"
+placeholder="Nome">
+
+<input
+type="email"
+id="cadastroEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="cadastroSenha"
+placeholder="Senha">
+
+<label class="upload-foto">
+
+Escolher foto
+
+<input
+type="file"
+id="cadastroFoto"
+accept="image/*">
+
+</label>
+
+<button
+type="button"
+onclick="cadastrar()">
+
+Cadastrar
+
+</button>
+
+</div>
+
+</div>
+
+<!-- JS -->
+<script src="js/main.js"></script>
+
+<script src="js/homeProdutos.js"></script>
+
+</body>
+</html>
