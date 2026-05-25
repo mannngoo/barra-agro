@@ -392,3 +392,14 @@ alert(
 /* INIT */
 
 window.atualizarCarrinho(); 
+/* =========================
+ABRIR CARRINHO
+========================= */
+
+window.abrirCarrinho =
+function() {
+
+window.location.href =
+"/pages/carrinho.html";
+
+};
