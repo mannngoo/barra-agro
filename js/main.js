@@ -391,4 +391,4 @@ alert(
 
 /* INIT */
 
-window.atualizarCarrinho();
+window.atualizarCarrinho(); 

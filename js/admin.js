@@ -1,7 +1,39 @@
 /* =========================
 FIREBASE
 ========================= */
+/* =========================
+ADMIN
+========================= */
 
+const ADMIN_EMAIL =
+
+"matheuscoutinhoirespereira8@gmail.com";
+
+/* USER */
+
+const usuario =
+
+JSON.parse(
+localStorage.getItem(
+"usuario"
+)
+);
+
+/* BLOCK */
+
+if(
+!usuario ||
+usuario.email !== ADMIN_EMAIL
+) {
+
+alert(
+"Acesso negado"
+);
+
+window.location.href =
+"/index.html";
+
+}
 const db = window.db;
 
 const collection = window.collection;
