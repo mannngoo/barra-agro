@@ -21,14 +21,16 @@ href="../css/pedidos.css">
 
 <body>
 
+<!-- HEADER -->
+
 <header class="header-premium">
 
 <div class="logo-area">
 
-<a href="/index.html">
+<a href="../index.html">
 
 <img
-src="/assets/images/logo.png"
+src="../assets/images/logo.png"
 class="logo">
 
 </a>
@@ -49,6 +51,8 @@ onclick="window.history.back()">
 
 </header>
 
+<!-- CONTAINER -->
+
 <div class="pedidos-container">
 
 <h1 class="pedidos-title">
@@ -63,12 +67,14 @@ Meus pedidos
 
 </div>
 
+<!-- FOOTER -->
+
 <footer class="footer">
 
 <div class="footer-content">
 
 <img
-src="/assets/images/logo.png"
+src="../assets/images/logo.png"
 class="footer-logo">
 
 <p>
@@ -81,6 +87,8 @@ Todos os direitos reservados
 </div>
 
 </footer>
+
+<!-- SCRIPT -->
 
 <script>
 
@@ -183,7 +191,7 @@ Pedido #${pedido.id}
 
 <div class="pedido-status">
 
-${pedido.status}
+${pedido.status || "Pagamento aprovado"}
 
 </div>
 
